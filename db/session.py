@@ -4,9 +4,9 @@ from sqlalchemy import select
 from db.models import Ledger, get_engine
 import os
 
-TRADER_IDS = ["momentum", "insider", "short", "regard", "boomer", "hugger"]
+TRADER_IDS = ["momentum", "insider", "short", "ape", "boomer", "hugger"]
 STARTING_CREDITS = 1000.00
-REGARD_RESET_THRESHOLD = 100.00
+APE_RESET_THRESHOLD = 100.00
 
 
 def get_session_factory(database_url: str = None):

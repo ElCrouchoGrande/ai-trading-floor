@@ -19,7 +19,7 @@ TRADER_DISPLAY = {
     "momentum": "📈 Momentum Trader",
     "insider":  "🕵️ Insider Tracker",
     "short":    "🐻 Short Seller",
-    "regard":   "🚀 WSB Ape",
+    "ape":      "🚀 WSB Ape",
     "boomer":   "👴 The Boomer",
     "hugger":   "🫂 Index Hugger",
 }
@@ -40,7 +40,7 @@ class WeeklyReporter:
         reports = self._get_week_reports(week_start)
         trades = self._get_week_trades(week_start)
         debates = self._get_week_debates(week_start)
-        regard_data = portfolio.get("regard", {})
+        ape_data = portfolio.get("ape", {})
 
         date_str = week_end.strftime("%d %B %Y")
 
@@ -64,8 +64,8 @@ class WeeklyReporter:
             padding: 16px; margin: 12px 0; }}
   .debate {{ background: #fff8f0; border: 1px solid #fed7aa; border-radius: 8px;
              padding: 16px; margin: 12px 0; font-size: 14px; line-height: 1.6; }}
-  .regard-box {{ background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px;
-                 padding: 16px; margin: 12px 0; }}
+  .ape-box {{ background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px;
+              padding: 16px; margin: 12px 0; }}
   .tag {{ display: inline-block; padding: 2px 8px; border-radius: 4px;
           font-size: 12px; font-weight: 600; }}
   .buy {{ background: #dcfce7; color: #16a34a; }}
@@ -160,14 +160,14 @@ class WeeklyReporter:
 </div>
 """
 
-        # REGARD WATCH
-        html += f"""<h2>🚀 Regard Watch</h2>
-<div class="regard-box">
-  <strong>Current pot:</strong> {regard_data.get('credits', 1000):.2f} credits &nbsp;
-  <strong>Total value:</strong> {regard_data.get('total_value', 1000):.2f} &nbsp;
-  <strong>Return:</strong> {regard_data.get('return_pct', 0):+.1f}%<br>
-  <strong>Lifetime resets:</strong> {regard_data.get('lifetime_resets', 0)} 💀<br>
-  <strong>Open positions:</strong> {regard_data.get('open_positions', 0)}
+        # APE WATCH
+        html += f"""<h2>🚀 Ape Watch</h2>
+<div class="ape-box">
+  <strong>Current pot:</strong> {ape_data.get('credits', 1000):.2f} credits &nbsp;
+  <strong>Total value:</strong> {ape_data.get('total_value', 1000):.2f} &nbsp;
+  <strong>Return:</strong> {ape_data.get('return_pct', 0):+.1f}%<br>
+  <strong>Lifetime resets:</strong> {ape_data.get('lifetime_resets', 0)} 💀<br>
+  <strong>Open positions:</strong> {ape_data.get('open_positions', 0)}
 </div>
 """
 

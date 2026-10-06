@@ -19,7 +19,7 @@ from db.session import get_ledger, adjust_credits
 logger = logging.getLogger(__name__)
 
 MAX_POSITION_PCT = 0.30   # 30% of pot max per position (short seller: 0.40)
-REGARD_MAX_PCT = 1.00     # regard can yolo entire pot
+APE_MAX_PCT = 1.00        # the Ape can yolo entire pot
 
 
 class BaseTrader(ABC):

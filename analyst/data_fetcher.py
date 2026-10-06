@@ -44,8 +44,8 @@ CORE_TICKERS = {
     "SAP":    {"name": "SAP",             "exchange": "US"},   # ADR
 }
 
-# Regard trades US-listed only (WSB doesn't cover EU/AS exchanges)
-REGARD_UNIVERSE = {k: v for k, v in CORE_TICKERS.items() if v["exchange"] == "US"}
+# The Ape trades US-listed only (WSB doesn't cover EU/AS exchanges)
+APE_UNIVERSE = {k: v for k, v in CORE_TICKERS.items() if v["exchange"] == "US"}
 
 
 # ---------------------------------------------------------------------------
