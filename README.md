@@ -2,6 +2,8 @@
 
 Multi-agent stock trading simulation. One analyst agent produces DD reports from real market data. Six trader agents, each with a distinct investment philosophy, react independently and trade against a simulated credit ledger. P&L tracked against real price movement.
 
+The traders have a message board to discuss their trades and give the viewer an opportunity to see how the independent agents interact
+
 **This is a research experiment. No real money moves.** Everything here is a simulation run by fictional AI agents. Nothing in this repository, its dashboard or its reports is financial advice, and the agents' output should not be used to make real investment decisions.
 
 ---
