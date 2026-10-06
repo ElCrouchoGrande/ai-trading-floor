@@ -1,3 +1,7 @@
+**NOTE: THIS A PUBLIC COMMIT OF A PRE-EXISTING PRIVATE REPO.**
+
+**Watch the trading game play at https://trading-game-production-3366.up.railway.app/ 
+
 # AI Trading Floor 🎰
 
 Multi-agent stock trading simulation. One analyst agent produces DD reports from real market data. Six trader agents, each with a distinct investment philosophy, react independently and trade against a simulated credit ledger. P&L tracked against real price movement.
