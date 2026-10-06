@@ -1,8 +1,8 @@
-# Trading Game 🎰
+# AI Trading Floor 🎰
 
 Multi-agent stock trading simulation. One analyst agent produces DD reports from real market data. Six trader agents, each with a distinct investment philosophy, react independently and trade against a simulated credit ledger. P&L tracked against real price movement.
 
-**This is a research experiment. No real money moves.**
+**This is a research experiment. No real money moves.** Everything here is a simulation run by fictional AI agents. Nothing in this repository, its dashboard or its reports is financial advice, and the agents' output should not be used to make real investment decisions.
 
 ---
 
@@ -11,7 +11,7 @@ Multi-agent stock trading simulation. One analyst agent produces DD reports from
 ### Analyst
 - Triggers on: earnings calendar, WSB spikes (via ApeWisdom), fast-rising WSB tickers, weekly digest (>5% price movement), manual `/inject`
 - Produces: structured BUY/SELL/HOLD report with bull case, bear case, risks, price target, confidence rating
-- Model: Claude Sonnet 4
+- Model: Claude Sonnet (see the `model=` strings in `analyst/`, `traders/` and `engine/`)
 
 ### Traders (1000 credits each)
 
@@ -33,8 +33,8 @@ Multi-agent stock trading simulation. One analyst agent produces DD reports from
 - **yfinance** — EOD prices, fundamentals, earnings calendar
 - **SEC EDGAR** — Form 4 insider filings (free, no key)
 - **ApeWisdom** — WSB sentiment API (free, no key)
-- **CapitolTrades** — congressional trade disclosures (scraper)
-- **Claude API** — Sonnet 4 for all agents
+- **CapitolTrades** — congressional trade disclosures (scraper, best effort)
+- **Claude API** — Sonnet for all agents
 
 ---
 
@@ -46,7 +46,7 @@ Multi-agent stock trading simulation. One analyst agent produces DD reports from
 # Install Railway CLI if needed
 npm install -g @railway/cli
 railway login
-railway link  # link to existing Trading-game project
+railway link  # link this repo to a new or existing Railway project
 ```
 
 ### 2. Add Postgres
@@ -59,8 +59,11 @@ Set these in Railway dashboard (Variables tab):
 
 ```
 ANTHROPIC_API_KEY=sk-ant-...
-ADMIN_TOKEN=...              # make something up, used for /inject and /portfolio
+ADMIN_TOKEN=...              # long random value; admin endpoints stay disabled if unset or "changeme"
+SEC_CONTACT_EMAIL=...        # contact address for the SEC EDGAR User-Agent (their fair-access policy asks for one)
 ```
+
+See `.env.example` for the optional settings (analyst cost throttles).
 
 No Reddit credentials needed — WSB data comes from ApeWisdom (free, no auth).
 
@@ -70,12 +73,12 @@ No Reddit credentials needed — WSB data comes from ApeWisdom (free, no auth).
 railway up
 ```
 
-Railway detects Python, installs `requirements.txt`, starts with:
+Railway detects Python, installs `requirements.txt`, and starts with (see `railway.toml`):
 ```
-uvicorn main:app --host 0.0.0.0 --port $PORT
+alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port $PORT
 ```
 
-On first boot, `create_tables()` and `initialise_ledgers()` run automatically.
+Migrations create the schema, and the six ledgers are seeded on first boot.
 
 ### 5. Verify
 
@@ -98,6 +101,21 @@ curl -X POST https://your-app.railway.app/inject \
 ```
 
 This runs the full pipeline: analyst report → all 6 traders react → debates if conflicts → ledgers updated.
+
+### Running locally
+
+```bash
+cp .env.example .env     # then fill in DATABASE_URL (Postgres) and ANTHROPIC_API_KEY
+pip install -r requirements.txt
+alembic upgrade head
+uvicorn main:app --reload
+```
+
+The dashboard is served at `/`. There is no test suite.
+
+## Data sources and costs
+
+Market data comes from yfinance (an unofficial Yahoo Finance wrapper), SEC EDGAR, ApeWisdom and CapitolTrades. Check each provider's terms before running this at scale or redistributing their data. Every analyst report and trader decision is a Claude API call, so running the scheduler costs money; the cooldown and per-run ticker cap in `.env.example` limit that.
 
 ---
 
