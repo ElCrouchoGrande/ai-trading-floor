@@ -5,7 +5,7 @@ and any overrides (position sizing, universe restrictions).
 import random
 import json
 from sqlalchemy.orm import Session
-from traders.base_trader import BaseTrader, REGARD_MAX_PCT
+from traders.base_trader import BaseTrader, APE_MAX_PCT
 from db.models import Report
 
 
@@ -104,10 +104,10 @@ Be forensic. Be contrarian. Be right eventually."""
 # 4. The WSB Ape
 # ---------------------------------------------------------------------------
 
-class WSBRegard(BaseTrader):
-    trader_id = "regard"
+class WSBApe(BaseTrader):
+    trader_id = "ape"
     display_name = "The WSB Ape 🚀"
-    max_position_pct = REGARD_MAX_PCT  # No limit — full yolo permitted
+    max_position_pct = APE_MAX_PCT  # No limit — full yolo permitted
 
     @property
     def system_prompt(self) -> str:

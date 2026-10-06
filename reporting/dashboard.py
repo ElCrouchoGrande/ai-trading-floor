@@ -27,7 +27,7 @@ from engine.debate import humanize_transcript
 logger = logging.getLogger(__name__)
 
 # Fixed left-to-right order for the trader columns / cards.
-TRADER_ORDER = ["momentum", "insider", "short", "regard", "boomer", "hugger"]
+TRADER_ORDER = ["momentum", "insider", "short", "ape", "boomer", "hugger"]
 
 # Single source of truth for names, emoji fallbacks, sprite seeds and the
 # distilled character bios (drawn from the personas in traders/all_traders.py).
@@ -68,10 +68,10 @@ TRADERS_META = {
         "risk": "High · up to 40% of pot, losses uncapped",
         "quirk": "Keeps trading even on negative credits — “I've seen worse.”",
     },
-    "regard": {
+    "ape": {
         "name": "The WSB Ape",
         "emoji": "🚀",
-        "seed": "regard",
+        "seed": "ape",
         "tagline": "To the moon. 💎🙌",
         "bio": "Trades on vibes, memes and whatever r/wallstreetbets is hyped "
                "about today. Anything a boomer would like gets passed on. "
@@ -659,7 +659,7 @@ function renderLeague(rows) {
           '<th class="right">Unreal.</th><th class="right">Value</th>' +
           '<th class="right">Return</th><th class="right">Pos</th></tr>';
   for (const r of rows) {
-    const resets = (r.trader_id === "regard" && r.lifetime_resets > 0)
+    const resets = (r.trader_id === "ape" && r.lifetime_resets > 0)
       ? '<span class="reset" title="Lifetime blow-ups">💀×' + r.lifetime_resets + '</span>' : '';
     h += '<tr><td class="muted">' + r.rank + '</td>' +
       '<td><span class="trader-cell">' + avatar(r.trader_id, 28) +

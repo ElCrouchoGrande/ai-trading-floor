@@ -22,7 +22,7 @@ TRADER_NAMES = {
     "momentum": "The Momentum Trader",
     "insider": "The Insider Tracker",
     "short": "The Short Seller",
-    "regard": "The WSB Ape",
+    "ape": "The WSB Ape",
     "boomer": "The Boomer",
     "hugger": "The Index Hugger",
 }
@@ -33,20 +33,19 @@ def _trader_name(trader_id: str) -> str:
 
 
 # Display-time cleanup for Debate rows created before this module mapped ids to
-# names — those transcripts baked raw ids ("regard") into the text.
+# names — those transcripts baked raw trader ids into the round labels.
 _ROUND_LABEL_RE = re.compile(r"(ROUND [12] - )(" + "|".join(TRADER_NAMES) + r")\b")
 _NO_REASONING_RE = re.compile(
     r"(\[No reasoning recorded for )(" + "|".join(TRADER_NAMES) + r")(\])"
 )
-_REGARD_RE = re.compile(r"\bregard\b", re.IGNORECASE)
 
 
 def humanize_transcript(text: str | None) -> str | None:
     """Swap raw trader_ids for display names in stored debate text.
 
     Structured "name slots" (round headers, the no-reasoning marker) are safe to
-    rewrite for every trader. In free prose only the `regard` token is swapped —
-    `short`/`momentum` collide with ordinary finance words, so they're left alone.
+    rewrite for every trader. Free prose is left alone: `short`/`momentum`
+    collide with ordinary finance words.
     """
     if not text:
         return text
@@ -54,7 +53,6 @@ def humanize_transcript(text: str | None) -> str | None:
     text = _NO_REASONING_RE.sub(
         lambda m: m.group(1) + TRADER_NAMES[m.group(2)] + m.group(3), text
     )
-    text = _REGARD_RE.sub(TRADER_NAMES["regard"], text)
     return text
 
 MEDIATOR_PROMPT = """You are moderating a structured debate between two traders who have taken \

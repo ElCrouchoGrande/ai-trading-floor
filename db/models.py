@@ -38,7 +38,7 @@ class Ledger(Base):
     id = Column(Integer, primary_key=True)
     trader_id = Column(String(50), nullable=False, unique=True, index=True)
     credits = Column(Numeric(10, 2), nullable=False, default=1000.00)
-    lifetime_resets = Column(Integer, default=0)  # regard only
+    lifetime_resets = Column(Integer, default=0)  # Ape only
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
@@ -57,7 +57,7 @@ class Trade(Base):
     closed_at = Column(DateTime(timezone=True))
     close_price = Column(Numeric(10, 2))
     pnl = Column(Numeric(10, 2))          # null until closed
-    reset_occurred = Column(Boolean, default=False)  # regard only
+    reset_occurred = Column(Boolean, default=False)  # Ape only
 
     report = relationship("Report", back_populates="trades")
 

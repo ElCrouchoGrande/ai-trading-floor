@@ -1,6 +1,6 @@
 """
 P&L engine — daily job that marks positions to market, checks exit conditions,
-and handles the regard's secret reset mechanic.
+and handles the Ape's secret reset mechanic.
 Runs at 21:00 UTC (after US market close).
 """
 import logging
@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from db.models import Position, Trade, LedgerSnapshot, Ledger
-from db.session import get_ledger, adjust_credits, STARTING_CREDITS, REGARD_RESET_THRESHOLD
+from db.session import get_ledger, adjust_credits, STARTING_CREDITS, APE_RESET_THRESHOLD
 
 logger = logging.getLogger(__name__)
 
@@ -37,8 +37,8 @@ EXIT_RULES = {
         "take_profit_pct": 0.40,   # cover if stock falls 40%
         "ma_cross_exit": False,
     },
-    "regard": {
-        "max_hold_days": 999,      # regards hold forever or go to zero
+    "ape": {
+        "max_hold_days": 999,      # the Ape holds forever or goes to zero
         "stop_loss_pct": -0.99,    # effectively no stop loss
         "take_profit_pct": 10.0,   # only exits on 10x (never happens)
         "ma_cross_exit": False,
@@ -69,14 +69,14 @@ class PnLEngine:
         1. Fetch closing prices for all open positions
         2. Check exit conditions
         3. Close positions that should exit
-        4. Check regard reset
+        4. Check Ape reset
         5. Take daily snapshots
         """
         logger.info("P&L daily job starting")
         results = {
             "positions_checked": 0,
             "positions_closed": [],
-            "regard_reset": False,
+            "ape_reset": False,
             "snapshots_taken": 0,
         }
 
@@ -108,10 +108,10 @@ class PnLEngine:
                         "pnl": pnl,
                     })
 
-        # 4. Regard reset check (net-worth based)
-        reset = self._check_regard_reset()
+        # 4. Ape reset check (net-worth based)
+        reset = self._check_ape_reset()
         if reset:
-            results["regard_reset"] = True
+            results["ape_reset"] = True
 
         # 5. Daily snapshots
         snapshots = self._take_snapshots()
@@ -154,7 +154,7 @@ class PnLEngine:
                 "total_value": round(total_value, 2),  # net worth: cash + positions at market
                 "return_pct": round((total_value - 1000) / 1000 * 100, 2),
                 "open_positions": len(trader_positions),
-                "lifetime_resets": ledger.lifetime_resets,  # regard only
+                "lifetime_resets": ledger.lifetime_resets,  # Ape only
             }
 
         return summary
@@ -274,7 +274,7 @@ class PnLEngine:
         self.session.commit()
         return count
 
-    def _check_regard_reset(self) -> bool:
+    def _check_ape_reset(self) -> bool:
         """
         Silently restore the Ape to a clean 1000-credit net worth if it has
         busted. Triggers on true net worth (cash + open positions marked to
@@ -285,7 +285,7 @@ class PnLEngine:
         The Ape is never told this happened.
         """
         positions = self.session.execute(
-            select(Position).where(Position.trader_id == "regard")
+            select(Position).where(Position.trader_id == "ape")
         ).scalars().all()
         prices = self._fetch_closing_prices(
             list({p.ticker for p in positions})
@@ -299,12 +299,12 @@ class PnLEngine:
             move = (price - entry) / entry if pos.direction == "LONG" else (entry - price) / entry
             return move * cr
 
-        ledger = get_ledger(self.session, "regard")
+        ledger = get_ledger(self.session, "ape")
         net_worth = float(ledger.credits)
         for pos in positions:
             net_worth += float(pos.credits_risked) + (_pnl(pos) or 0.0)
 
-        if net_worth >= REGARD_RESET_THRESHOLD:
+        if net_worth >= APE_RESET_THRESHOLD:
             return False
 
         now = datetime.now(timezone.utc)

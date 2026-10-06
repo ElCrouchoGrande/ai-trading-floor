@@ -19,7 +19,7 @@ from db.session import get_session_factory, get_session, initialise_ledgers
 from analyst.agent import AnalystAgent, TriggerDetector
 from traders.all_traders import (
     MomentumTrader, InsiderTracker, ShortSeller,
-    WSBRegard, TheBoomer, IndexHugger
+    WSBApe, TheBoomer, IndexHugger
 )
 from engine.pnl import PnLEngine
 from engine.debate import DebateEngine
@@ -47,7 +47,7 @@ SessionFactory, _ = get_session_factory(DATABASE_URL)
 
 scheduler = AsyncIOScheduler(timezone="UTC")
 
-TRADERS = [MomentumTrader, InsiderTracker, ShortSeller, WSBRegard, TheBoomer, IndexHugger]
+TRADERS = [MomentumTrader, InsiderTracker, ShortSeller, WSBApe, TheBoomer, IndexHugger]
 
 
 # ---------------------------------------------------------------------------
