@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+.env
+.env.local
+.venv/
+venv/
+env/
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+*.egg-info/
+build/
+dist/
+
+.DS_Store
+.idea/
+.vscode/
+
+# Local fallback weekly report dumps
+~/trading-desk/
+trading-desk/
+
+# Local Alembic dev DB (sqlite, if anyone tests offline)
+*.sqlite
+*.db
