@@ -1,6 +1,6 @@
-**NOTE: THIS A PUBLIC COMMIT OF A PRE-EXISTING PRIVATE REPO.**
+**NOTE: THIS IS A PUBLIC COMMIT OF A PRE-EXISTING PRIVATE REPO.**
 
-**Watch the trading game play at https://trading-game-production-3366.up.railway.app/ 
+**Watch the trading game play at https://trading-game-production-3366.up.railway.app/**
 
 # AI Trading Floor 🎰
 
@@ -131,7 +131,7 @@ Market data comes from yfinance (an unofficial Yahoo Finance wrapper), SEC EDGAR
 |-----|----------|-------------|
 | Trigger check | Hourly, Mon-Fri 07:00-22:00 UTC | Earnings + WSB spike detection |
 | Weekly digest | Mon 08:00 UTC | Analyst covers all tickers with >5% weekly movement |
-| Daily P&L | Mon-Fri 21:00 UTC | Mark-to-market, exit conditions, regard reset check |
+| Daily P&L | Mon-Fri 21:00 UTC | Mark-to-market, exit conditions, Ape reset check |
 
 ---
 
@@ -161,7 +161,7 @@ All require `X-Admin-Token` header.
 
 ## The Ape's Secret
 
-The WSB Ape resets silently to 1000 credits if their pot drops below 100. They don't know this. The weekly report tracks "lifetime resets" as a running stat. Do not tell the ape. (The internal `trader_id` is still `regard`.)
+The WSB Ape resets silently to 1000 credits if their pot drops below 100. They don't know this. The weekly report tracks "lifetime resets" as a running stat. Do not tell the ape.
 
 ---
 
@@ -176,7 +176,7 @@ traders/
   base_trader.py           # Abstract trader base class
   all_traders.py           # All 6 trader implementations
 engine/
-  pnl.py                   # Daily P&L, exit conditions, regard reset
+  pnl.py                   # Daily P&L, exit conditions, Ape reset
   debate.py                # Conflict detection + two-round debates
 reporting/
   weekly_report.py         # Weekly HTML report builder (/weekly/preview)
